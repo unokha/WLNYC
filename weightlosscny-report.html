@@ -1,0 +1,789 @@
+<title>weightlosscny.com — Site Performance &amp; Technical Health Report</title>
+<style>
+  :root{
+    --paper:#f6f3ec;
+    --surface:#fffdf8;
+    --surface-2:#f0ebe0;
+    --ink:#211f19;
+    --ink-2:#5c584c;
+    --muted:#8f8a78;
+    --hairline:#e3ddcc;
+    --hairline-strong:#d3cbb6;
+    --accent:#1c5cab;
+    --accent-soft:rgba(28,92,171,0.10);
+    --accent-2:#1baf7a;
+    --good:#0ca30c;
+    --warning:#c98500;
+    --serious:#c9622f;
+    --critical:#c23333;
+    --critical-soft:rgba(194,51,51,0.09);
+    --critical-strong:#8f2323;
+    --s1:#2a78d6; --s2:#1baf7a; --s3:#eda100; --s4:#008300;
+    --s5:#4a3aa7; --s6:#e34948; --s7:#e87ba4; --s8:#eb6834;
+    --shadow: 0 1px 2px rgba(33,31,25,0.06), 0 8px 24px -12px rgba(33,31,25,0.12);
+    --serif: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#141310;
+      --surface:#1c1a15;
+      --surface-2:#242119;
+      --ink:#f4f1e9;
+      --ink-2:#c6c1af;
+      --muted:#938e7c;
+      --hairline:#322e23;
+      --hairline-strong:#413c2d;
+      --accent:#5b9ce4;
+      --accent-soft:rgba(91,156,228,0.14);
+      --accent-2:#199e70;
+      --good:#0ca30c;
+      --warning:#c98500;
+      --serious:#ec835a;
+      --critical:#e0605f;
+      --critical-soft:rgba(224,96,95,0.12);
+      --critical-strong:#f0908f;
+      --s1:#3987e5; --s2:#199e70; --s3:#c98500; --s4:#3fae3f;
+      --s5:#9085e9; --s6:#e66767; --s7:#d55181; --s8:#d95926;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#141310; --surface:#1c1a15; --surface-2:#242119; --ink:#f4f1e9; --ink-2:#c6c1af; --muted:#938e7c;
+    --hairline:#322e23; --hairline-strong:#413c2d; --accent:#5b9ce4; --accent-soft:rgba(91,156,228,0.14);
+    --accent-2:#199e70; --critical:#e0605f; --critical-soft:rgba(224,96,95,0.12); --critical-strong:#f0908f;
+    --s1:#3987e5; --s2:#199e70; --s3:#c98500; --s4:#3fae3f; --s5:#9085e9; --s6:#e66767; --s7:#d55181; --s8:#d95926;
+  }
+  :root[data-theme="light"]{
+    --paper:#f6f3ec; --surface:#fffdf8; --surface-2:#f0ebe0; --ink:#211f19; --ink-2:#5c584c; --muted:#8f8a78;
+    --hairline:#e3ddcc; --hairline-strong:#d3cbb6; --accent:#1c5cab; --accent-soft:rgba(28,92,171,0.10);
+    --accent-2:#1baf7a; --critical:#c23333; --critical-soft:rgba(194,51,51,0.09); --critical-strong:#8f2323;
+    --s1:#2a78d6; --s2:#1baf7a; --s3:#eda100; --s4:#008300; --s5:#4a3aa7; --s6:#e34948; --s7:#e87ba4; --s8:#eb6834;
+  }
+
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px 96px;}
+  ::selection{background:var(--accent-soft);}
+
+  a{color:var(--accent);}
+
+  /* ---------- Nav ---------- */
+  .topnav{position:sticky;top:0;z-index:20;background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--hairline);}
+  .topnav-inner{max-width:920px;margin:0 auto;padding:0 24px;display:flex;gap:22px;overflow-x:auto;
+    scrollbar-width:none;}
+  .topnav-inner::-webkit-scrollbar{display:none;}
+  .topnav a{display:block;padding:14px 0;font-size:13px;color:var(--ink-2);text-decoration:none;
+    white-space:nowrap;border-bottom:2px solid transparent;font-weight:600;letter-spacing:.01em;}
+  .topnav a:hover{color:var(--ink);}
+
+  /* ---------- Cover ---------- */
+  .cover{padding:64px 0 40px;border-bottom:1px solid var(--hairline);}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin:0 0 18px;}
+  .cover h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.4vw,44px);line-height:1.1;
+    margin:0 0 14px;text-wrap:balance;letter-spacing:-.01em;}
+  .cover .sub{font-size:17px;color:var(--ink-2);max-width:60ch;margin:0 0 28px;}
+  .cover-meta{display:flex;flex-wrap:wrap;gap:28px 40px;font-family:var(--mono);font-size:12.5px;
+    color:var(--muted);}
+  .cover-meta strong{display:block;color:var(--ink-2);font-family:var(--sans);font-size:13.5px;
+    font-weight:600;margin-bottom:2px;}
+
+  /* ---------- Sections ---------- */
+  section{padding:56px 0;border-bottom:1px solid var(--hairline);}
+  section:last-of-type{border-bottom:none;}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px;
+    flex-wrap:wrap;}
+  h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0;letter-spacing:-.01em;text-wrap:balance;}
+  h2 .n{font-family:var(--mono);color:var(--muted);font-weight:400;font-size:15px;margin-right:10px;}
+  .section-note{font-size:13px;color:var(--muted);font-family:var(--mono);}
+  p.lede{font-size:16px;color:var(--ink-2);max-width:66ch;margin:0 0 24px;}
+  h3{font-family:var(--serif);font-size:18px;font-weight:600;margin:0 0 10px;}
+  .prose{max-width:66ch;font-size:15px;color:var(--ink-2);}
+  .prose strong{color:var(--ink);font-weight:600;}
+
+  /* ---------- KPI tiles ---------- */
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;
+    background:var(--hairline);border:1px solid var(--hairline);border-radius:10px;overflow:hidden;}
+  .kpi{background:var(--surface);padding:20px 18px;}
+  .kpi .label{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);
+    font-weight:600;margin-bottom:10px;}
+  .kpi .value{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:27px;font-weight:600;
+    letter-spacing:-.01em;color:var(--ink);}
+  .kpi .delta{font-size:12.5px;color:var(--ink-2);margin-top:6px;}
+  .kpi.flag{background:var(--critical-soft);}
+  .kpi.flag .value{color:var(--critical-strong);}
+  .kpi.flag .label{color:var(--critical-strong);}
+
+  /* ---------- Charts (SVG line) ---------- */
+  .chart-card{background:var(--surface);border:1px solid var(--hairline);border-radius:10px;
+    padding:22px 22px 12px;box-shadow:var(--shadow);}
+  .chart-title-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;
+    flex-wrap:wrap;gap:8px;}
+  .chart-title{font-weight:600;font-size:14.5px;}
+  .legend{display:flex;gap:16px;font-size:12.5px;color:var(--ink-2);}
+  .legend .sw{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;
+    vertical-align:middle;}
+  svg.linechart{width:100%;height:auto;display:block;overflow:visible;}
+  svg.linechart .gridline{stroke:var(--hairline);stroke-width:1;}
+  svg.linechart .axislabel{fill:var(--muted);font-family:var(--mono);font-size:10.5px;}
+  svg.linechart .ylabel{fill:var(--muted);font-family:var(--mono);font-size:10px;}
+  svg.linechart .annot{fill:var(--ink-2);font-family:var(--sans);font-size:11.5px;font-weight:600;}
+  svg.linechart circle.pt{cursor:default;}
+  svg.linechart circle.pt:hover{r:5.5;}
+  .chart-caption{font-size:13px;color:var(--ink-2);margin:10px 0 4px;padding-top:12px;
+    border-top:1px solid var(--hairline);}
+
+  /* ---------- Bar meters (HTML/CSS) ---------- */
+  .bars{display:flex;flex-direction:column;gap:11px;}
+  .bar-row{display:grid;grid-template-columns:190px 1fr auto;align-items:center;gap:12px;}
+  .bar-row .blabel{font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;
+    white-space:nowrap;}
+  .bar-row .btrack{position:relative;height:11px;background:var(--surface-2);border-radius:3px;}
+  .bar-row .bfill{position:absolute;left:0;top:0;height:100%;border-radius:0 3px 3px 0;
+    background:var(--s1);}
+  .bar-row .bval{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12.5px;
+    color:var(--ink-2);text-align:right;min-width:56px;}
+  .bar-row.critical .bfill{background:var(--critical);}
+  .bar-row .bnote{font-size:11.5px;color:var(--muted);grid-column:2/4;margin-top:-4px;}
+
+  /* ---------- Tables ---------- */
+  .table-wrap{overflow-x:auto;border:1px solid var(--hairline);border-radius:10px;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--surface);
+    min-width:560px;}
+  th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--hairline);}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;
+    background:var(--surface-2);}
+  td.num, th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;}
+  tr:last-child td{border-bottom:none;}
+  td.path{font-family:var(--mono);font-size:12.5px;}
+  .tag{display:inline-block;font-family:var(--sans);font-size:10.5px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:20px;}
+  .tag.bug{background:var(--critical-soft);color:var(--critical-strong);}
+  .tag.redirect{background:var(--accent-soft);color:var(--accent);}
+  .tag.tracking{background:rgba(201,133,0,0.14);color:#a86a00;}
+  :root[data-theme="dark"] .tag.tracking, @media (prefers-color-scheme:dark){.tag.tracking{color:#f0b73f;}}
+
+  details.datatable{margin-top:16px;}
+  details.datatable summary{cursor:pointer;font-size:13px;color:var(--accent);font-weight:600;
+    padding:6px 0;}
+
+  /* ---------- Callout / incident cards ---------- */
+  .notfound-band{background:var(--critical-soft);border-top:3px solid var(--critical);
+    border-bottom:1px solid var(--hairline);}
+  .callout{background:var(--surface);border:1px solid var(--hairline);border-left:3px solid var(--critical);
+    border-radius:8px;padding:16px 18px;margin-bottom:14px;}
+  .callout h4{margin:0 0 6px;font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .callout h4 .dot{width:8px;height:8px;border-radius:50%;background:var(--critical);flex:none;}
+  .callout p{margin:0;font-size:13.5px;color:var(--ink-2);}
+  .callout p+p{margin-top:6px;}
+  .callout code{font-family:var(--mono);font-size:12px;background:var(--surface-2);padding:1px 5px;
+    border-radius:4px;}
+
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px;}
+  .stat-box{background:var(--surface);border:1px solid var(--hairline-strong);border-radius:10px;
+    padding:18px 18px;}
+  .stat-box .big{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:30px;font-weight:700;
+    color:var(--critical-strong);letter-spacing:-.01em;}
+  .stat-box .cap{font-size:12.5px;color:var(--ink-2);margin-top:6px;}
+
+  ol.recs{margin:0;padding:0;list-style:none;counter-reset:rec;display:flex;flex-direction:column;gap:14px;}
+  ol.recs li{counter-increment:rec;display:grid;grid-template-columns:auto 1fr;gap:14px;
+    background:var(--surface);border:1px solid var(--hairline);border-radius:8px;padding:14px 16px;}
+  ol.recs li .pri{font-family:var(--mono);font-size:11px;font-weight:700;color:#fff;background:var(--critical);
+    border-radius:5px;padding:3px 7px;height:fit-content;white-space:nowrap;}
+  ol.recs li.p1 .pri{background:var(--warning);}
+  ol.recs li.p2 .pri{background:var(--muted);}
+  ol.recs li .rtitle{font-weight:600;font-size:14px;margin-bottom:3px;}
+  ol.recs li .rbody{font-size:13px;color:var(--ink-2);}
+
+  .questions{background:var(--surface);border:1px dashed var(--hairline-strong);border-radius:10px;
+    padding:20px 22px;}
+  .questions h4{margin:0 0 10px;font-size:14.5px;}
+  .questions ol{margin:0;padding-left:20px;font-size:13.5px;color:var(--ink-2);display:flex;
+    flex-direction:column;gap:10px;}
+  .questions li strong{color:var(--ink);}
+
+  footer{padding:40px 0 10px;font-size:12.5px;color:var(--muted);font-family:var(--mono);}
+  footer .fgrid{display:flex;flex-wrap:wrap;gap:8px 28px;}
+
+  @media (max-width:640px){
+    .bar-row{grid-template-columns:120px 1fr auto;}
+    .kpi .value{font-size:22px;}
+  }
+</style>
+
+<div class="topnav">
+  <nav class="topnav-inner">
+    <a href="#summary">Summary</a>
+    <a href="#trend">Traffic trend</a>
+    <a href="#channels">Channels &amp; devices</a>
+    <a href="#pages">Top pages</a>
+    <a href="#conversions">Conversions</a>
+    <a href="#notfound">404 investigation</a>
+    <a href="#recommendations">Recommendations</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <header class="cover">
+    <p class="eyebrow">Site performance &amp; technical health report</p>
+    <h1>weightlosscny.com — 90-day analytics review</h1>
+    <p class="sub">Medical Weight Loss of New York (Fayetteville, NY) · Google Analytics 4 property
+      <span style="font-family:var(--mono)">339517799</span></p>
+    <div class="cover-meta">
+      <div><strong>Reporting period</strong>Apr 9 – Jul 8, 2026 (90 days)</div>
+      <div><strong>Prepared for</strong>weightlosscny.com</div>
+      <div><strong>Prepared by</strong>Unokha</div>
+      <div><strong>Generated</strong>Jul 8, 2026</div>
+    </div>
+  </header>
+
+  <section id="summary">
+    <div class="section-head"><h2>Executive summary</h2></div>
+    <p class="lede">Traffic is healthy and mostly new-visitor driven, with organic and paid search converting
+      well. The one issue that needs attention: roughly <strong style="color:var(--critical-strong)">1 in 9
+      pageviews (10.9%)</strong> lands on a broken page, concentrated in desktop/direct traffic, and the
+      rate has climbed sharply in the most recent week. Full breakdown below, deep dive starting at
+      <a href="#notfound">404 investigation</a>.</p>
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="label">Sessions</div><div class="value">10,085</div>
+        <div class="delta">8,775 users · 99% new</div></div>
+      <div class="kpi"><div class="label">Pageviews</div><div class="value">13,460</div>
+        <div class="delta">1.33 pages / session</div></div>
+      <div class="kpi"><div class="label">Engagement rate</div><div class="value">30.3%</div>
+        <div class="delta">avg. session 1:25</div></div>
+      <div class="kpi"><div class="label">Key-event conversions</div><div class="value">520</div>
+        <div class="delta">5.2% of sessions</div></div>
+      <div class="kpi flag"><div class="label">Pageviews hitting a 404</div><div class="value">10.9%</div>
+        <div class="delta">1,470 views · 1,439 sessions</div></div>
+    </div>
+  </section>
+
+  <section id="trend">
+    <div class="section-head">
+      <h2>Traffic trend</h2>
+      <span class="section-note">Weekly · Apr 5 – Jul 8, 2026</span>
+    </div>
+    <p class="lede">Volume spiked hard in the week of Apr 19, but engagement collapsed at the same time —
+      a sign the spike was low-intent traffic rather than qualified visitors. Both settled back to a
+      healthy baseline by mid-May.</p>
+
+    <div class="chart-card">
+      <div class="chart-title-row">
+        <span class="chart-title">Sessions &amp; pageviews</span>
+        <span class="legend">
+          <span><span class="sw" style="background:var(--s1)"></span>Sessions</span>
+          <span><span class="sw" style="background:var(--s2)"></span>Pageviews</span>
+        </span>
+      </div>
+      <svg class="linechart" viewBox="0 0 880 300" preserveAspectRatio="xMidYMid meet">
+        <line class="gridline" x1="44" y1="244" x2="860" y2="244"></line>
+        <line class="gridline" x1="44" y1="183" x2="860" y2="183"></line>
+        <line class="gridline" x1="44" y1="122" x2="860" y2="122"></line>
+        <line class="gridline" x1="44" y1="61" x2="860" y2="61"></line>
+        <text class="ylabel" x="38" y="248" text-anchor="end">0</text>
+        <text class="ylabel" x="38" y="126" text-anchor="end">1.6k</text>
+        <text class="ylabel" x="38" y="65" text-anchor="end">2.4k</text>
+
+        <polyline fill="none" stroke="var(--s2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          points="44.0,246.9 106.8,208.1 169.5,51.8 232.3,125.3 295.1,197.3 357.8,212.1 420.6,210.6 483.4,216.4 546.2,176.4 608.9,194.5 671.7,199.3 734.5,205.1 797.2,195.4 860.0,231.7"></polyline>
+        <polyline fill="none" stroke="var(--s1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+          points="44.0,252.4 106.8,226.2 169.5,74.7 232.3,155.5 295.1,223.3 357.8,230.3 420.6,227.7 483.4,226.8 546.2,196.4 608.9,214.0 671.7,216.0 734.5,225.1 797.2,216.4 860.0,239.2"></polyline>
+
+        <text class="annot" x="150" y="42" text-anchor="middle">Apr 19 – May 2: traffic spike</text>
+        <line x1="150" y1="48" x2="180" y2="70" stroke="var(--ink-2)" stroke-width="1" stroke-dasharray="2,2"></line>
+
+        <g>
+          <circle class="pt" cx="169.5" cy="74.7" r="3.2" fill="var(--s1)"><title>Week of Apr 19: 2,485 sessions</title></circle>
+          <circle class="pt" cx="169.5" cy="51.8" r="3.2" fill="var(--s2)"><title>Week of Apr 19: 2,786 pageviews</title></circle>
+          <circle class="pt" cx="860.0" cy="239.2" r="3.2" fill="var(--s1)"><title>Jul 5–8 (partial): 326 sessions</title></circle>
+          <circle class="pt" cx="860.0" cy="231.7" r="3.2" fill="var(--s2)"><title>Jul 5–8 (partial): 424 pageviews</title></circle>
+        </g>
+
+        <text class="axislabel" x="44.0" y="270" text-anchor="middle">Apr 5</text>
+        <text class="axislabel" x="169.5" y="270" text-anchor="middle">Apr 19</text>
+        <text class="axislabel" x="295.1" y="270" text-anchor="middle">May 3</text>
+        <text class="axislabel" x="420.6" y="270" text-anchor="middle">May 17</text>
+        <text class="axislabel" x="546.2" y="270" text-anchor="middle">May 31</text>
+        <text class="axislabel" x="671.7" y="270" text-anchor="middle">Jun 14</text>
+        <text class="axislabel" x="797.2" y="270" text-anchor="middle">Jun 28</text>
+        <text class="axislabel" x="860.0" y="270" text-anchor="middle" fill="var(--muted)">Jul 5*</text>
+      </svg>
+      <div class="chart-caption">*Week of Jul 5 is partial — 4 days of data (Jul 5–8) at time of writing.</div>
+    </div>
+
+    <div style="height:16px"></div>
+
+    <div class="chart-card">
+      <div class="chart-title-row"><span class="chart-title">Engagement rate</span></div>
+      <svg class="linechart" viewBox="0 0 880 300" preserveAspectRatio="xMidYMid meet">
+        <line class="gridline" x1="44" y1="229" x2="860" y2="229"></line>
+        <line class="gridline" x1="44" y1="159" x2="860" y2="159"></line>
+        <line class="gridline" x1="44" y1="89" x2="860" y2="89"></line>
+        <line class="gridline" x1="44" y1="20" x2="860" y2="20"></line>
+        <text class="ylabel" x="38" y="233" text-anchor="end">0%</text>
+        <text class="ylabel" x="38" y="163" text-anchor="end">23%</text>
+        <text class="ylabel" x="38" y="93" text-anchor="end">47%</text>
+        <text class="ylabel" x="38" y="24" text-anchor="end">70%</text>
+
+        <polyline fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+          points="44.0,43.7 106.8,86.9 169.5,219.7 232.3,197.4 295.1,108.2 357.8,116.6 420.6,115.5 483.4,125.6 546.2,154.5 608.9,122.1 671.7,132.2 734.5,109.2 797.2,124.6 860.0,167.8"></polyline>
+
+        <text class="annot" x="200" y="240" text-anchor="middle" fill="var(--critical-strong)">engagement cratered during the spike</text>
+        <circle class="pt" cx="169.5" cy="219.7" r="3.5" fill="var(--critical)"><title>Week of Apr 19: 12.7% engagement rate</title></circle>
+        <circle class="pt" cx="44.0" cy="43.7" r="3.2" fill="var(--accent)"><title>Week of Apr 5: 63.2% engagement rate</title></circle>
+
+        <text class="axislabel" x="44.0" y="270" text-anchor="middle">Apr 5</text>
+        <text class="axislabel" x="169.5" y="270" text-anchor="middle">Apr 19</text>
+        <text class="axislabel" x="295.1" y="270" text-anchor="middle">May 3</text>
+        <text class="axislabel" x="420.6" y="270" text-anchor="middle">May 17</text>
+        <text class="axislabel" x="546.2" y="270" text-anchor="middle">May 31</text>
+        <text class="axislabel" x="671.7" y="270" text-anchor="middle">Jun 14</text>
+        <text class="axislabel" x="797.2" y="270" text-anchor="middle">Jun 28</text>
+        <text class="axislabel" x="860.0" y="270" text-anchor="middle" fill="var(--muted)">Jul 5*</text>
+      </svg>
+      <div class="chart-caption">Reads inversely with the spike above — the surge in volume was low-quality
+        traffic, not new demand.</div>
+    </div>
+
+    <details class="datatable">
+      <summary>View weekly data table</summary>
+      <div class="table-wrap" style="margin-top:10px">
+        <table>
+          <thead><tr><th>Week of</th><th class="num">Sessions</th><th class="num">Pageviews</th>
+            <th class="num">Engagement</th><th class="num">Avg. session</th></tr></thead>
+          <tbody>
+            <tr><td>Apr 5</td><td class="num">152</td><td class="num">225</td><td class="num">63.2%</td><td class="num">2:12</td></tr>
+            <tr><td>Apr 12</td><td class="num">496</td><td class="num">734</td><td class="num">50.8%</td><td class="num">1:54</td></tr>
+            <tr><td>Apr 19</td><td class="num">2,485</td><td class="num">2,786</td><td class="num">12.7%</td><td class="num">0:33</td></tr>
+            <tr><td>Apr 26</td><td class="num">1,425</td><td class="num">1,821</td><td class="num">19.1%</td><td class="num">0:53</td></tr>
+            <tr><td>May 3</td><td class="num">535</td><td class="num">876</td><td class="num">44.7%</td><td class="num">2:24</td></tr>
+            <tr><td>May 10</td><td class="num">442</td><td class="num">682</td><td class="num">42.3%</td><td class="num">1:59</td></tr>
+            <tr><td>May 17</td><td class="num">477</td><td class="num">701</td><td class="num">42.6%</td><td class="num">2:03</td></tr>
+            <tr><td>May 24</td><td class="num">489</td><td class="num">625</td><td class="num">39.7%</td><td class="num">1:54</td></tr>
+            <tr><td>May 31</td><td class="num">888</td><td class="num">1,150</td><td class="num">31.4%</td><td class="num">1:26</td></tr>
+            <tr><td>Jun 7</td><td class="num">656</td><td class="num">913</td><td class="num">40.7%</td><td class="num">2:06</td></tr>
+            <tr><td>Jun 14</td><td class="num">630</td><td class="num">849</td><td class="num">37.8%</td><td class="num">1:56</td></tr>
+            <tr><td>Jun 21</td><td class="num">511</td><td class="num">773</td><td class="num">44.4%</td><td class="num">1:59</td></tr>
+            <tr><td>Jun 28</td><td class="num">625</td><td class="num">901</td><td class="num">40.0%</td><td class="num">1:39</td></tr>
+            <tr><td>Jul 5*</td><td class="num">326</td><td class="num">424</td><td class="num">27.6%</td><td class="num">1:18</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <section id="channels">
+    <div class="section-head">
+      <h2>Channels &amp; devices</h2>
+      <span class="section-note">90 days</span>
+    </div>
+    <p class="lede">Direct brings the most volume but converts worst by a wide margin. Organic and paid
+      search are the workhorses — high engagement, high conversion. Referral is small but exceptionally
+      well-qualified.</p>
+
+    <div class="chart-card">
+      <div class="chart-title-row"><span class="chart-title">Sessions by channel</span></div>
+      <div class="bars">
+        <div class="bar-row"><div class="blabel">Direct</div>
+          <div class="btrack"><div class="bfill" style="width:100%;background:var(--s1)"></div></div>
+          <div class="bval">5,756</div></div>
+        <div class="bar-row"><div class="bnote">1.1% conversion rate · 8.0% engagement — see 404 note below</div></div>
+
+        <div class="bar-row"><div class="blabel">Organic search</div>
+          <div class="btrack"><div class="bfill" style="width:45.4%;background:var(--s2)"></div></div>
+          <div class="bval">2,614</div></div>
+        <div class="bar-row"><div class="bnote">11.6% conversion rate · 62.2% engagement — best volume-to-quality mix</div></div>
+
+        <div class="bar-row"><div class="blabel">Paid search</div>
+          <div class="btrack"><div class="bfill" style="width:23.7%;background:var(--s3)"></div></div>
+          <div class="bval">1,364</div></div>
+        <div class="bar-row"><div class="bnote">6.5% conversion rate · 63.9% engagement</div></div>
+
+        <div class="bar-row"><div class="blabel">Referral</div>
+          <div class="btrack"><div class="bfill" style="width:3.2%;background:var(--s4)"></div></div>
+          <div class="bval">184</div></div>
+        <div class="bar-row"><div class="bnote">30.4% conversion rate — small but the highest-converting channel on site</div></div>
+
+        <div class="bar-row"><div class="blabel">Organic social</div>
+          <div class="btrack"><div class="bfill" style="width:1.4%;background:var(--s5)"></div></div>
+          <div class="bval">79</div></div>
+
+        <div class="bar-row"><div class="blabel">Unassigned</div>
+          <div class="btrack"><div class="bfill" style="width:0.8%;background:var(--s6)"></div></div>
+          <div class="bval">47</div></div>
+      </div>
+      <div class="chart-caption">Cross-network, Email and AI Assistant channels each carried &lt;15
+        sessions this period — too small to chart, listed in the table below.</div>
+    </div>
+
+    <details class="datatable">
+      <summary>View full channel table</summary>
+      <div class="table-wrap" style="margin-top:10px">
+        <table>
+          <thead><tr><th>Channel</th><th class="num">Sessions</th><th class="num">Users</th>
+            <th class="num">Engagement</th><th class="num">Conversions</th><th class="num">Conv. rate</th></tr></thead>
+          <tbody>
+            <tr><td>Direct</td><td class="num">5,756</td><td class="num">5,637</td><td class="num">8.0%</td><td class="num">62</td><td class="num">1.1%</td></tr>
+            <tr><td>Organic Search</td><td class="num">2,614</td><td class="num">1,845</td><td class="num">62.2%</td><td class="num">302</td><td class="num">11.6%</td></tr>
+            <tr><td>Paid Search</td><td class="num">1,364</td><td class="num">1,157</td><td class="num">63.9%</td><td class="num">89</td><td class="num">6.5%</td></tr>
+            <tr><td>Referral</td><td class="num">184</td><td class="num">103</td><td class="num">46.7%</td><td class="num">56</td><td class="num">30.4%</td></tr>
+            <tr><td>Organic Social</td><td class="num">79</td><td class="num">77</td><td class="num">53.2%</td><td class="num">1</td><td class="num">1.3%</td></tr>
+            <tr><td>Unassigned</td><td class="num">47</td><td class="num">45</td><td class="num">21.3%</td><td class="num">5</td><td class="num">10.6%</td></tr>
+            <tr><td>Cross-network</td><td class="num">12</td><td class="num">12</td><td class="num">100%</td><td class="num">2</td><td class="num">16.7%</td></tr>
+            <tr><td>Email</td><td class="num">6</td><td class="num">2</td><td class="num">50.0%</td><td class="num">3</td><td class="num">50.0%</td></tr>
+            <tr><td>AI Assistant</td><td class="num">4</td><td class="num">4</td><td class="num">50.0%</td><td class="num">0</td><td class="num">0%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <div style="height:28px"></div>
+    <h3>Device split</h3>
+    <div class="chart-card">
+      <div class="bars">
+        <div class="bar-row"><div class="blabel">Desktop</div>
+          <div class="btrack"><div class="bfill" style="width:100%;background:var(--s1)"></div></div>
+          <div class="bval">6,587</div></div>
+        <div class="bar-row"><div class="bnote">17.4% engagement — pulled down by a 20% 404 rate, see below</div></div>
+
+        <div class="bar-row"><div class="blabel">Mobile</div>
+          <div class="btrack"><div class="bfill" style="width:51.6%;background:var(--s2)"></div></div>
+          <div class="bval">3,402</div></div>
+        <div class="bar-row"><div class="bnote">56.6% engagement — the healthier device, despite lower volume</div></div>
+
+        <div class="bar-row"><div class="blabel">Tablet</div>
+          <div class="btrack"><div class="bfill" style="width:1.3%;background:var(--s3)"></div></div>
+          <div class="bval">88</div></div>
+      </div>
+      <div class="chart-caption">Desktop carries 65% of sessions but converts and engages far worse than
+        mobile — this is not a UX problem, it's the 404 problem below wearing a device disguise.</div>
+    </div>
+  </section>
+
+  <section id="pages">
+    <div class="section-head">
+      <h2>Top pages</h2>
+      <span class="section-note">By pageviews · 90 days</span>
+    </div>
+    <p class="lede">The homepage and <span style="font-family:var(--mono)">/programs/</span> dominate
+      traffic. <span style="font-family:var(--mono)">/phentermine-for-weight-loss/</span> is the standout
+      for engagement — over a minute of read time on a fraction of the traffic.</p>
+
+    <div class="chart-card">
+      <div class="chart-title-row"><span class="chart-title">Pageviews by URL</span></div>
+      <div class="bars">
+        <div class="bar-row"><div class="blabel">/ (home)</div>
+          <div class="btrack"><div class="bfill" style="width:100%"></div></div><div class="bval">2,803</div></div>
+        <div class="bar-row"><div class="blabel">/programs/</div>
+          <div class="btrack"><div class="bfill" style="width:81.1%"></div></div><div class="bval">2,273</div></div>
+        <div class="bar-row"><div class="blabel">/meet-our-team/</div>
+          <div class="btrack"><div class="bfill" style="width:30.6%"></div></div><div class="bval">859</div></div>
+        <div class="bar-row"><div class="blabel">/contact-us/</div>
+          <div class="btrack"><div class="bfill" style="width:22.7%"></div></div><div class="bval">636</div></div>
+        <div class="bar-row"><div class="blabel">/phentermine-for-weight-loss/</div>
+          <div class="btrack"><div class="bfill" style="width:21.1%"></div></div><div class="bval">591</div></div>
+        <div class="bar-row"><div class="blabel">/reducing-visceral-fat/</div>
+          <div class="btrack"><div class="bfill" style="width:10.8%"></div></div><div class="bval">304</div></div>
+        <div class="bar-row"><div class="blabel">/education-resources/</div>
+          <div class="btrack"><div class="bfill" style="width:10.2%"></div></div><div class="bval">286</div></div>
+        <div class="bar-row"><div class="blabel">/all-products/</div>
+          <div class="btrack"><div class="bfill" style="width:4.9%"></div></div><div class="bval">136</div></div>
+        <div class="bar-row"><div class="blabel">/hormone-replacement-therapy</div>
+          <div class="btrack"><div class="bfill" style="width:3.1%"></div></div><div class="bval">87</div></div>
+        <div class="bar-row"><div class="blabel">/thank-you/</div>
+          <div class="btrack"><div class="bfill" style="width:2.9%"></div></div><div class="bval">80</div></div>
+      </div>
+    </div>
+
+    <details class="datatable">
+      <summary>View top pages with average engagement time</summary>
+      <div class="table-wrap" style="margin-top:10px">
+        <table>
+          <thead><tr><th>Page</th><th class="num">Pageviews</th><th class="num">Sessions</th>
+            <th class="num">Avg. engagement time</th></tr></thead>
+          <tbody>
+            <tr><td class="path">/ (home)</td><td class="num">2,803</td><td class="num">2,390</td><td class="num">0:19</td></tr>
+            <tr><td class="path">/programs/</td><td class="num">2,273</td><td class="num">1,784</td><td class="num">0:37</td></tr>
+            <tr><td class="path">/meet-our-team/</td><td class="num">859</td><td class="num">750</td><td class="num">0:51</td></tr>
+            <tr><td class="path">/contact-us/</td><td class="num">636</td><td class="num">554</td><td class="num">0:21</td></tr>
+            <tr><td class="path">/phentermine-for-weight-loss/</td><td class="num">591</td><td class="num">586</td><td class="num">1:05</td></tr>
+            <tr><td class="path">/reducing-visceral-fat/</td><td class="num">304</td><td class="num">295</td><td class="num">0:31</td></tr>
+            <tr><td class="path">/education-resources/</td><td class="num">286</td><td class="num">223</td><td class="num">0:39</td></tr>
+            <tr><td class="path">/all-products/</td><td class="num">136</td><td class="num">126</td><td class="num">0:29</td></tr>
+            <tr><td class="path">/weight-loss</td><td class="num">98</td><td class="num">80</td><td class="num">0:26</td></tr>
+            <tr><td class="path">/hormone-replacement-therapy</td><td class="num">87</td><td class="num">79</td><td class="num">0:52</td></tr>
+            <tr><td class="path">/thank-you/</td><td class="num">80</td><td class="num">69</td><td class="num">0:11</td></tr>
+            <tr><td class="path">/weight-loss-injections-side-effects/</td><td class="num">73</td><td class="num">66</td><td class="num">0:08</td></tr>
+            <tr><td class="path">/book-a-discovery-call/</td><td class="num">63</td><td class="num">32</td><td class="num">0:09</td></tr>
+            <tr><td class="path">/privacy-policy-and-website-terms-of-use/</td><td class="num">62</td><td class="num">61</td><td class="num">0:03</td></tr>
+            <tr><td class="path">/what-causes-an-increase-in-belly-fat-after-menopause/</td><td class="num">38</td><td class="num">38</td><td class="num">0:26</td></tr>
+            <tr><td class="path">/phentermine-for-weight-loss <span class="tag redirect">no slash</span></td><td class="num">37</td><td class="num">37</td><td class="num">0:57</td></tr>
+            <tr><td class="path">/ozempic-vs-wegovy-vs-mounjaro/</td><td class="num">36</td><td class="num">35</td><td class="num">0:12</td></tr>
+            <tr><td class="path">/our-practice <span class="tag bug">live</span></td><td class="num">34</td><td class="num">33</td><td class="num">0:32</td></tr>
+            <tr><td class="path">/how-30-minutes-of-yoga-a-day-will-change-your-life/</td><td class="num">32</td><td class="num">31</td><td class="num">0:12</td></tr>
+            <tr><td class="path">/menopause-vs-andropause/</td><td class="num">32</td><td class="num">32</td><td class="num">0:02</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <section id="conversions">
+    <div class="section-head">
+      <h2>Conversions</h2>
+      <span class="section-note">Key events · 90 days</span>
+    </div>
+    <p class="lede">520 total key events. Two-thirds are product-referral clicks (myclinicshop.com,
+      Metagenics) rather than direct leads — worth knowing which number gets reported as "conversions"
+      to the practice.</p>
+
+    <div class="stat-row" style="margin-bottom:18px">
+      <div class="stat-box" style="border-left:3px solid var(--s1)">
+        <div class="big" style="color:var(--ink)">340</div>
+        <div class="cap">Product-referral clicks (myclinicshop + Metagenics) — 65% of all conversions</div>
+      </div>
+      <div class="stat-box" style="border-left:3px solid var(--s2)">
+        <div class="big" style="color:var(--ink)">172</div>
+        <div class="cap">Direct leads (contact form, schedule click, call click) — 33% of all conversions</div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title-row"><span class="chart-title">Key events by volume</span></div>
+      <div class="bars">
+        <div class="bar-row"><div class="blabel">Product click — myclinicshop.com</div>
+          <div class="btrack"><div class="bfill" style="width:100%;background:var(--s1)"></div></div><div class="bval">258</div></div>
+        <div class="bar-row"><div class="blabel">Contact form submit</div>
+          <div class="btrack"><div class="bfill" style="width:38.4%;background:var(--s2)"></div></div><div class="bval">99</div></div>
+        <div class="bar-row"><div class="blabel">Product click — Metagenics</div>
+          <div class="btrack"><div class="bfill" style="width:31.8%;background:var(--s1)"></div></div><div class="bval">82</div></div>
+        <div class="bar-row"><div class="blabel">Click to schedule</div>
+          <div class="btrack"><div class="bfill" style="width:18.6%;background:var(--s2)"></div></div><div class="bval">48</div></div>
+        <div class="bar-row"><div class="blabel">Click to call</div>
+          <div class="btrack"><div class="bfill" style="width:9.7%;background:var(--s2)"></div></div><div class="bval">25</div></div>
+        <div class="bar-row"><div class="blabel">Click for directions</div>
+          <div class="btrack"><div class="bfill" style="width:2.3%;background:var(--s2)"></div></div><div class="bval">6</div></div>
+        <div class="bar-row"><div class="blabel">Form submit (site)</div>
+          <div class="btrack"><div class="bfill" style="width:0.8%;background:var(--s2)"></div></div><div class="bval">2</div></div>
+      </div>
+      <div class="chart-caption"><span class="sw" style="background:var(--s1);display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px"></span>Product-referral &nbsp;&nbsp;
+        <span class="sw" style="background:var(--s2);display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px"></span>Direct lead</div>
+    </div>
+  </section>
+
+  <section id="notfound" class="notfound-band">
+    <div class="wrap" style="padding:0">
+      <div style="padding-top:56px">
+      <div class="section-head">
+        <h2>404 investigation</h2>
+        <span class="section-note" style="color:var(--critical-strong)">The concern you asked about</span>
+      </div>
+      <p class="lede">1,470 pageviews over the last 90 days — <strong>10.9% of all pageviews</strong> —
+        landed on a "Page not found" screen. It's concentrated in a specific pattern (desktop, direct
+        traffic, no referrer) and has been getting worse, not better.</p>
+
+      <div class="stat-row">
+        <div class="stat-box"><div class="big">10.9%</div><div class="cap">of all pageviews are 404s (1,470 of 13,460)</div></div>
+        <div class="stat-box"><div class="big">14.3%</div><div class="cap">of sessions hit a 404 at least once (1,439 of 10,085)</div></div>
+        <div class="stat-box"><div class="big">229</div><div class="cap">distinct broken URLs receiving traffic</div></div>
+        <div class="stat-box"><div class="big">49%</div><div class="cap">of sessions hit a 404 in the most recent 4 days — up from a ~15% average</div></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title-row"><span class="chart-title">404 rate — % of sessions hitting a broken page, by week</span></div>
+        <svg class="linechart" viewBox="0 0 880 300" preserveAspectRatio="xMidYMid meet">
+          <line class="gridline" x1="44" y1="264" x2="860" y2="264"></line>
+          <line class="gridline" x1="44" y1="209" x2="860" y2="209"></line>
+          <line class="gridline" x1="44" y1="153" x2="860" y2="153"></line>
+          <line class="gridline" x1="44" y1="97" x2="860" y2="97"></line>
+          <text class="ylabel" x="38" y="268" text-anchor="end">0%</text>
+          <text class="ylabel" x="38" y="213" text-anchor="end">14%</text>
+          <text class="ylabel" x="38" y="157" text-anchor="end">27%</text>
+          <text class="ylabel" x="38" y="101" text-anchor="end">41%</text>
+
+          <polyline fill="none" stroke="var(--critical)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            points="44.0,264.0 106.8,216.5 169.5,224.1 232.3,212.5 295.1,185.9 357.8,179.7 420.6,197.9 483.4,179.7 546.2,232.1 608.9,186.8 671.7,147.8 734.5,225.8 797.2,187.3"></polyline>
+          <polyline fill="none" stroke="var(--critical)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            stroke-dasharray="5,4" points="797.2,187.3 860.0,46.2"></polyline>
+
+          <circle class="pt" cx="860.0" cy="46.2" r="4.5" fill="var(--critical)"><title>Jul 5–8 (partial, 4 days): 49.1% of sessions hit a 404</title></circle>
+          <text class="annot" x="770" y="34" text-anchor="end" fill="var(--critical-strong)">49% — most recent 4 days*</text>
+
+          <circle class="pt" cx="671.7" cy="147.8" r="3.2" fill="var(--critical)"><title>Week of Jun 14: 26.2%</title></circle>
+          <circle class="pt" cx="44.0" cy="264.0" r="3.2" fill="var(--critical)"><title>Week of Apr 5: 0%</title></circle>
+
+          <text class="axislabel" x="44.0" y="284" text-anchor="middle">Apr 5</text>
+          <text class="axislabel" x="169.5" y="284" text-anchor="middle">Apr 19</text>
+          <text class="axislabel" x="295.1" y="284" text-anchor="middle">May 3</text>
+          <text class="axislabel" x="420.6" y="284" text-anchor="middle">May 17</text>
+          <text class="axislabel" x="546.2" y="284" text-anchor="middle">May 31</text>
+          <text class="axislabel" x="671.7" y="284" text-anchor="middle">Jun 14</text>
+          <text class="axislabel" x="797.2" y="284" text-anchor="middle">Jun 28</text>
+          <text class="axislabel" x="860.0" y="284" text-anchor="middle" fill="var(--critical-strong)">Jul 5*</text>
+        </svg>
+        <div class="chart-caption">*Jul 5 point is 4 days of data, not a full week — directionally
+          concerning but treat as provisional until the week completes.</div>
+      </div>
+
+      <div style="height:28px"></div>
+      <h3>Where the broken traffic comes from</h3>
+      <p class="prose" style="margin-bottom:16px">92% of 404 sessions are on <strong>desktop</strong> and
+        91% carry <strong>no referrer</strong> (Direct). That combination — desktop, no referrer, hitting
+        specific old URLs — reads as bookmarks, browser autofill/history, or saved links from before a
+        past redesign, not random typos.</p>
+      <div class="chart-card">
+        <div class="bars">
+          <div class="bar-row"><div class="blabel">Direct / no referrer</div>
+            <div class="btrack"><div class="bfill critical-fill" style="width:91.2%;background:var(--critical)"></div></div><div class="bval">1,313</div></div>
+          <div class="bar-row"><div class="blabel">google / organic</div>
+            <div class="btrack"><div class="bfill" style="width:3.1%;background:var(--critical)"></div></div><div class="bval">44</div></div>
+          <div class="bar-row"><div class="blabel">Instagram / social</div>
+            <div class="btrack"><div class="bfill" style="width:2.1%;background:var(--critical)"></div></div><div class="bval">30</div></div>
+          <div class="bar-row"><div class="blabel">google / cpc (paid ads)</div>
+            <div class="btrack"><div class="bfill" style="width:1.2%;background:var(--critical)"></div></div><div class="bval">17</div></div>
+          <div class="bar-row"><div class="blabel">keap.app (CRM/email)</div>
+            <div class="btrack"><div class="bfill" style="width:0.7%;background:var(--critical)"></div></div><div class="bval">10</div></div>
+          <div class="bar-row"><div class="blabel">Other referral / email</div>
+            <div class="btrack"><div class="bfill" style="width:0.8%;background:var(--critical)"></div></div><div class="bval">14</div></div>
+        </div>
+        <div class="chart-caption">The <strong style="color:var(--critical-strong)">google/cpc</strong> row is
+          the one to act on fastest — that's active ad spend landing on a dead page.</div>
+      </div>
+
+      <div style="height:28px"></div>
+      <h3>Top broken URLs</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>URL</th><th class="num">Views</th><th class="num">Sessions</th><th>Pattern</th></tr></thead>
+          <tbody>
+            <tr><td class="path">/hormone-replacement-therapy</td><td class="num">62</td><td class="num">50</td><td><span class="tag bug">flaky page</span></td></tr>
+            <tr><td class="path">/dr-wendy-scinta</td><td class="num">55</td><td class="num">54</td><td><span class="tag redirect">legacy URL</span></td></tr>
+            <tr><td class="path">/glp-1s-for-weight-loss</td><td class="num">39</td><td class="num">39</td><td><span class="tag redirect">legacy URL</span></td></tr>
+            <tr><td class="path">/thank-you</td><td class="num">39</td><td class="num">32</td><td><span class="tag tracking">missing slash</span></td></tr>
+            <tr><td class="path">/products</td><td class="num">37</td><td class="num">37</td><td><span class="tag redirect">legacy nav</span></td></tr>
+            <tr><td class="path">/our-practice</td><td class="num">35</td><td class="num">36</td><td><span class="tag bug">flaky page</span></td></tr>
+            <tr><td class="path">/solutions</td><td class="num">34</td><td class="num">34</td><td><span class="tag redirect">legacy nav</span></td></tr>
+            <tr><td class="path">/new-york-medical-weight-loss-programs/optifast-program</td><td class="num">31</td><td class="num">31</td><td><span class="tag redirect">legacy URL</span></td></tr>
+            <tr><td class="path">/dr-wendy-scinta/dr-scinta-in-the-media</td><td class="num">28</td><td class="num">28</td><td><span class="tag redirect">legacy URL</span></td></tr>
+            <tr><td class="path">/what-causes-an-increase-in-abdominal-fat-after-menopause</td><td class="num">28</td><td class="num">25</td><td><span class="tag redirect">renamed slug</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose" style="margin-top:10px;font-size:13px">Full list of 229 broken URLs available on
+        request — the remaining ~200 average under 10 views each and are almost all remnants of a prior
+        site structure (<span style="font-family:var(--mono);font-size:12px">/lifestyle/*</span>,
+        <span style="font-family:var(--mono);font-size:12px">/patient-testimonials/*</span>,
+        <span style="font-family:var(--mono);font-size:12px">/healthy-eating-menu/*</span>,
+        <span style="font-family:var(--mono);font-size:12px">/medical-weight-loss-guide/*</span>).</p>
+
+      <div style="height:28px"></div>
+      <h3>Four confirmed patterns</h3>
+      <div class="callout">
+        <h4><span class="dot"></span>Two live pages intermittently 404</h4>
+        <p><code>/hormone-replacement-therapy</code> and <code>/our-practice</code> each show up
+          <strong>both</strong> as normal pageviews and as "Page not found" on the exact same URL within
+          the same 90 days. That's not a dead link — it's the live page failing some of the time. Worth a
+          developer look at caching, CDN rules, or server rewrites before doing any redirect work here.</p>
+      </div>
+      <div class="callout">
+        <h4><span class="dot"></span>Missing trailing slash may be breaking conversion tracking</h4>
+        <p><code>/thank-you</code> (no slash) 404s 39 times while <code>/thank-you/</code> (with slash) is
+          the real, working page. If any ad platform, email template, or CRM automation is set up to send
+          people to the no-slash version, those conversions — and any pixel that fires on that page —
+          are being lost silently.</p>
+      </div>
+      <div class="callout">
+        <h4><span class="dot"></span>A renamed post lost its redirect</h4>
+        <p><code>/what-causes-an-increase-in-abdominal-fat-after-menopause</code> (404, 28 views) is
+          near-identical in topic to the live <code>/what-causes-an-increase-in-belly-fat-after-menopause/</code>
+          (38 views) — looks like the post was renamed and the old slug was never redirected.</p>
+      </div>
+      <div class="callout">
+        <h4><span class="dot"></span>A whole legacy URL structure was never redirected</h4>
+        <p>The bulk of the 229 broken paths share a handful of old prefixes
+          (<code>/lifestyle/</code>, <code>/patient-testimonials/</code>, <code>/healthy-eating-menu/</code>,
+          <code>/medical-weight-loss-guide/</code>) plus short nav paths like <code>/products</code>,
+          <code>/solutions</code>, <code>/blog</code>, <code>/faq</code>. This is the signature of a past
+          site migration or redesign where old URLs were never bulk-redirected to their new equivalents.</p>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="recommendations">
+    <div class="section-head"><h2>Recommendations</h2></div>
+    <ol class="recs">
+      <li><span class="pri">P0</span>
+        <div><div class="rtitle">Audit Google Ads final URLs</div>
+        <div class="rbody">17 sessions from google/cpc hit a 404 this period — that's paid budget landing
+          on a dead page. Check every active ad group's destination URL.</div></div></li>
+      <li><span class="pri">P0</span>
+        <div><div class="rtitle">Confirm /thank-you conversion tracking</div>
+        <div class="rbody">Check whether any ad, email, or CRM link points to <code>/thank-you</code>
+          without the trailing slash, and fix it — plus add a general redirect rule for missing trailing
+          slashes site-wide so this class of issue can't recur.</div></div></li>
+      <li><span class="pri">P0</span>
+        <div><div class="rtitle">Get a developer to reproduce the flaky pages</div>
+        <div class="rbody"><code>/hormone-replacement-therapy</code> and <code>/our-practice</code> are
+          live pages that sometimes 404. Check CDN/cache rules and server rewrites — this is a bug, not a
+          content gap.</div></div></li>
+      <li class="p1"><span class="pri">P1</span>
+        <div><div class="rtitle">Bulk 301-redirect the legacy URL structure</div>
+        <div class="rbody">Map the old prefixes (<code>/lifestyle/*</code>, <code>/patient-testimonials/*</code>,
+          <code>/healthy-eating-menu/*</code>, <code>/medical-weight-loss-guide/*</code>) and short nav
+          paths (<code>/products</code>, <code>/solutions</code>, <code>/blog</code>, <code>/faq</code>)
+          to their current equivalents. This alone should clear the majority of the 229 broken URLs.</div></div></li>
+      <li class="p1"><span class="pri">P1</span>
+        <div><div class="rtitle">Update the Keap/CRM email templates and "Condor 2025" campaign</div>
+        <div class="rbody">Both are actively sending clicks to broken URLs — a quick template fix
+          recovers that traffic immediately.</div></div></li>
+      <li class="p1"><span class="pri">P1</span>
+        <div><div class="rtitle">Update the Instagram bio/pinned link</div>
+        <div class="rbody">30 sessions this period came from Instagram straight into a 404.</div></div></li>
+      <li class="p2"><span class="pri">P2</span>
+        <div><div class="rtitle">Ask prevention.com to update their link</div>
+        <div class="rbody">A live editorial backlink points to a dead URL — worth reclaiming both the
+          traffic and the SEO value once the correct destination is confirmed.</div></div></li>
+      <li class="p2"><span class="pri">P2</span>
+        <div><div class="rtitle">Resubmit the sitemap and watch Search Console</div>
+        <div class="rbody">44 sessions still arrive from Google organic results pointing at 404s — old
+          URLs are still indexed. Resubmit and monitor the Coverage report monthly.</div></div></li>
+    </ol>
+
+    <div style="height:28px"></div>
+    <div class="questions">
+      <h4>Open questions for you</h4>
+      <ol>
+        <li><strong>Redirect destinations</strong> — for the legacy URLs we don't have confident mapping
+          for (<code>/dr-wendy-scinta</code>, <code>/glp-1s-for-weight-loss</code>, <code>/solutions</code>),
+          can you confirm the right current pages so redirects go to the correct place rather than a
+          generic fallback?</li>
+        <li><strong>Site history</strong> — did the site go through a platform migration or redesign in
+          the last year or two? That would confirm the legacy-structure theory and help scope the
+          redirect map.</li>
+        <li><strong>Ad account access</strong> — should we pull the Google Ads final URLs directly, or
+          will your team check destination URLs on their end?</li>
+        <li><strong>Reporting cadence</strong> — want this 404 check running monthly going forward so a
+          spike like the most recent week gets caught within days instead of showing up in a quarterly
+          review?</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fgrid">
+      <span>GA4 property: weightlosscny.com (339517799)</span>
+      <span>Timezone: America/New_York</span>
+      <span>Period: 2026-04-09 – 2026-07-08</span>
+      <span>Generated: 2026-07-08</span>
+    </div>
+  </footer>
+
+</div>
